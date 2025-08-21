@@ -199,7 +199,7 @@ Repeated failed logins on a Windows client (VLAN 30) followed by a successful lo
 
 ## 📄 License (MIT)
 
-Copyright © 2025 **0xΔ1∂n R.J.**
+Copyright © 2025 **ZTr1∂n R.J.**
 This project is licensed under the **MIT License**. See the [Licence.md](https://github.com/0x1void/SentryX/blob/main/Licence.md) file for details.
 
 ---
@@ -216,7 +216,7 @@ Contributions are welcome. See the [CONTRIBUTING.md](https://github.com/0x1void/
 
 ---
 
-✍️ *Développé par 0xΔ1∂n R.J. – 2025*
+✍️ *Développé par ZTr1∂n R.J. – 2025*
 
 ---
 
@@ -413,7 +413,7 @@ Multiples échecs de connexion sur un poste Windows (VLAN 30) suivis d’une ré
 
 ## 📄 Licence (MIT)
 
-Copyright © 2025 **0xΔ1∂n R.J.**
+Copyright © 2025 **ZTr1∂n R.J.**
 Ce projet est sous licence **MIT**. Voir le fichier [Licence.md](https://github.com/0x1void/SentryX/blob/main/Licence.md) pour les détails.
 
 ---
@@ -430,4 +430,4 @@ Les contributions sont les bienvenues. Voir le fichier [CONTRIBUTING.md](https:/
 
 ---
 
-✍️ *Développé par 0xΔ1∂n R.J. – 2025*
+✍️ *Développé par ZTr1∂n R.J. – 2025*
