@@ -40,7 +40,7 @@ Thanks for taking the time to help improve SentryX. This lab is meant to be prac
 - Use markdown tables where they add clarity.
 - Keep emojis helpful and minimal.
 
----
+---   ZTr1∂n
 
 ## 🇫🇷 Français
 
