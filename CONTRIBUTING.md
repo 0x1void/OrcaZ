@@ -81,3 +81,5 @@ Merci pour votre aide pour améliorer SentryX. Ce lab se veut pratique, reproduc
 - Ton simple et direct ; privilégier les étapes concrètes aux conseils généraux.
 - Utiliser des tableaux Markdown quand cela clarifie.
 - Émojis utiles et discrets.
+
+--- ZTr1∂n
