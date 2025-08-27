@@ -11,7 +11,7 @@
 
 ### 1) Overview 🚀
 
-**OrcaZ** is a compact, exam‑ready lab: **VLAN‑segmented**, **identity‑first**, and **observable**. To keep the virtual host light, two core roles run on **dedicated bare‑metal Linux** (names intentionally hidden):
+OrcaZ is a small, real-world lab that runs on one hypervisor plus two lean Linux boxes. The network is split across three VLANs—CoreNet, OpsNet, ClientNet—so traffic stays tidy and easy to reason about. Identity comes first: Samba AD/DNS is the authority, hosts join the domain (Kerberos/LDAP), and all admin access flows through the private overlay **W-Link**. **Sentinel** provides the control plane (Headscale for the overlay, Pi-hole for DNS filtering) while **Vault** handles storage (OpenZFS + SMB/NFS) with snapshots and replication. The rest lives as VMs: pfSense for routing/firewall, Zabbix and Wazuh for observability, GLPI for ITSM, and Windows Server 2025 for exam tasks. Default-deny between VLANs, a simple **AD → Sentinel → DoH/DoT** DNS chain, and clean **10.x.x.x/24** addressing make the build reproducible, secure 🔒, and easy to operate 🧭.
 
 * **Vault** — storage: **OpenZFS + Samba/NFS** (files, backups, snapshots).
 * **Sentinel** — control: **Headscale** (identity overlay) + **Pi-hole** (DNS filter).
@@ -226,7 +226,7 @@ All hosts: Zabbix + Wazuh agents; local firewall default‑deny; central logging
 
 ### 1) Vue d’ensemble 🚀
 
-**OrcaZ** est un lab « entreprise » compact : **VLANs**, **identité d’abord**, **observabilité**. Pour alléger l’hyperviseur, deux rôles tournent sur **Linux physique** (noms masqués) :
+OrcaZ est un lab concret et compact, pensé pour tourner sur un hyperviseur et deux petites machines Linux. Le réseau est découpé en trois VLAN — CoreNet, OpsNet, ClientNet — pour garder des flux clairs et maîtrisés. L’identité passe en premier : Samba AD/DNS fait autorité, les hôtes rejoignent le domaine (Kerberos/LDAP) et toute l’administration transite par l’overlay privé **W-Link**. **Sentinel** assure le plan de contrôle (Headscale pour l’overlay, Pi-hole pour le filtre DNS) tandis que **Vault** gère le stockage (OpenZFS + SMB/NFS) avec snapshots et réplication. Le reste s’exécute en VMs : pfSense pour le routage/pare-feu, Zabbix et Wazuh pour l’observabilité, GLPI pour l’ITSM, et Windows Server 2025 pour les tâches d’examen. Politique par défaut « refus » entre VLANs, chaîne DNS **AD → Sentinel → DoH/DoT**, et adressage **10.x.x.x/24** pour un montage reproductible, sécurisé 🔒 et simple à opérer 🧭.
 
 * **Vault** — stockage : **OpenZFS + Samba/NFS** (fichiers, sauvegardes, snapshots).
 * **Sentinel** — contrôle : **Headscale** (overlay d’identité) + **Pi‑hole** (filtre DNS).
