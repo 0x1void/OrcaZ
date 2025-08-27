@@ -199,7 +199,26 @@ All hosts: Zabbix + Wazuh agents; local firewall default‑deny; central logging
 
 ### 9) Validation Checklist ✅
 
-*
+- [ ] **Overlay reachability** — From **W-Link**, open each admin UI:  
+  `https://10.10.10.1` (pfSense), `https://10.20.20.20` (Zabbix),  
+  `https://10.20.20.30` (Wazuh), `https://10.20.20.40` (GLPI),  
+  `https://10.20.20.50` (Windows), `smb://10.30.30.20` (Vault).
+- [ ] **DNS authority** —  
+  `dig @10.10.10.10 glpi.orcaz.lab +short` → **10.20.20.40** ;  
+  `dig @10.10.10.10 zabbix.orcaz.lab +short` → **10.20.20.20** ;  
+  `dig @10.10.10.10 winsrv.orcaz.lab +short` → **10.20.20.50**.
+- [ ] **Pi-hole path** — On a server, `nslookup doubleclick.net 10.10.10.10` returns **blocked/0.0.0.0**; AD/DNS forwards to **Sentinel** only.
+- [ ] **AD/Kerberos health** —  
+  `kinit administrator@ORCAZ.LAB` → ticket OK ; `klist` shows valid TGT ; `wbinfo -t` (trust) **succeeds**.
+- [ ] **Time sync** — `timedatectl` on domain members shows NTP **synchronized** (source AD/pfSense).
+- [ ] **SMB encryption** — `smbclient -L //10.30.30.20 -m SMB3 -e` reports **encryption = required**.
+- [ ] **Inter-VLAN isolation** — From VLAN30 host:  
+  `nmap -Pn 10.20.20.0/24 -p 22,80,443,445,3389` → only expected ports; others **closed/filtered**.
+- [ ] **Monitoring** — Zabbix **Latest data** populated; agents visible from CoreNet/OpsNet/ClientNet.
+- [ ] **Logging/SIEM** — Wazuh **agents online**; pfSense **syslog** ingested; Windows logs visible.
+- [ ] **Backups** — `zfs list -t snapshot` shows today’s snapshot; last replication job **OK**; pfSense XML config exported.
+- [ ] **Access control** — Management UIs reachable **only via W-Link**; blocked from non-admin segments.
+- [ ] **GLPI auth** — LDAP/Kerberos login works with a domain user; inventory/agents reporting if enabled.
 
 ---
 
@@ -388,6 +407,26 @@ Règle **3‑2‑1** ; exports de config (pfSense, AD, GLPI/Zabbix/Wazuh) ; snap
 
 ### 9) Checklist de validation ✅
 
-*
+- [ ] **Accès overlay** — Depuis **W-Link**, ouvrir chaque UI :  
+  `https://10.10.10.1` (pfSense), `https://10.20.20.20` (Zabbix),  
+  `https://10.20.20.30` (Wazuh), `https://10.20.20.40` (GLPI),  
+  `https://10.20.20.50` (Windows), `smb://10.30.30.20` (Vault).
+- [ ] **Autorité DNS** —  
+  `dig @10.10.10.10 glpi.orcaz.lab +short` → **10.20.20.40** ;  
+  `dig @10.10.10.10 zabbix.orcaz.lab +short` → **10.20.20.20** ;  
+  `dig @10.10.10.10 winsrv.orcaz.lab +short` → **10.20.20.50**.
+- [ ] **Chemin Pi-hole** — Sur un serveur, `nslookup doubleclick.net 10.10.10.10` renvoie **bloqué/0.0.0.0** ; AD/DNS **forward** uniquement vers **Sentinel**.
+- [ ] **Santé AD/Kerberos** —  
+  `kinit administrator@ORCAZ.LAB` → ticket OK ; `klist` affiche un TGT valide ; `wbinfo -t` (trust) **réussi**.
+- [ ] **Synchronisation temps** — `timedatectl` indique **synchronized** (source AD/pfSense) sur les membres du domaine.
+- [ ] **Chiffrement SMB** — `smbclient -L //10.30.30.20 -m SMB3 -e` renvoie **encryption = required**.
+- [ ] **Isolement inter-VLAN** — Depuis VLAN30 :  
+  `nmap -Pn 10.20.20.0/24 -p 22,80,443,445,3389` → ports attendus ; autres **fermés/filtrés**.
+- [ ] **Supervision** — Zabbix **Données récentes** non vides ; agents visibles CoreNet/OpsNet/ClientNet.
+- [ ] **Logs/SIEM** — Wazuh **agents en ligne** ; **syslog pfSense** collecté ; logs Windows visibles.
+- [ ] **Sauvegardes** — `zfs list -t snapshot` montre le snapshot du jour ; dernière réplication **OK** ; export XML pfSense effectué.
+- [ ] **Contrôle d’accès** — UIs d’administration accessibles **uniquement via W-Link** ; bloquées depuis les segments non-admin.
+- [ ] **Auth GLPI** — Connexion LDAP/Kerberos avec un compte du domaine ; inventaire/agents remontent si activés.
+
 
 ---
