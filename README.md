@@ -1,6 +1,6 @@
 # ⚡🐋 OrcaZ — Zero-Trust Lab Infrastructure
 
-![Arch Linux](https://img.shields.io/badge/Arch%20Linux-rolling-blue?logo=archlinux) ![KVM/QEMU](https://img.shields.io/badge/KVM%2FQEMU-virtualization-333?logo=qemu) ![libvirt](https://img.shields.io/badge/libvirt-enabled-4c9) ![pfSense](https://img.shields.io/badge/pfSense-firewall-1f4a7f?logo=pfsense) ![Samba](https://img.shields.io/badge/Samba-AD%2FDC-ffb400?logo=samba) ![Windows Server 2025](https://img.shields.io/badge/Windows%20Server-2025-0078d6?logo=windows)
+![Arch Linux](https://img.shields.io/badge/Arch%20Linux-rolling-blue?logo=archlinux) ![KVM/QEMU](https://img.shields.io/badge/KVM%2FQEMU-virtualization-333?logo=qemu) ![libvirt](https://img.shields.io/badge/libvirt-enabled-4c9) ![pfSense](https://img.shields.io/badge/pfSense-firewall-1f4a7f?logo=pfsense) ![Windows Server 2025](https://img.shields.io/badge/Windows%20Server-2025-0078d6?logo=windows)
 ![Debian](https://img.shields.io/badge/Debian-GLPI%2FZabbix%2FWazuh-a80030?logo=debian) ![TrueNAS](https://img.shields.io/badge/TrueNAS-CORE-0b6aa2?logo=truenas) ![Pi-hole](https://img.shields.io/badge/Pi--hole-DNS%20filtering-a41f1f?logo=pi-hole) ![Headscale](https://img.shields.io/badge/Headscale-identity%20overlay-444) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ---
@@ -22,7 +22,7 @@ Arch Linux — [https://wiki.archlinux.org/](https://wiki.archlinux.org/)
 KVM/QEMU — [https://www.qemu.org/](https://www.qemu.org/) · libvirt — [https://libvirt.org/](https://libvirt.org/)
 Debian — [https://www.debian.org/releases/](https://www.debian.org/releases/)
 OpenZFS — [https://openzfs.github.io/openzfs-docs/](https://openzfs.github.io/openzfs-docs/)
-Samba AD/DC — [https://wiki.samba.org/index.php/Setting\_up\_Samba\_as\_an\_Active\_Directory\_Domain\_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+Samba AD/DC — [https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 Zabbix — [https://www.zabbix.com/documentation/current/en/manual/installation](https://www.zabbix.com/documentation/current/en/manual/installation)
 Wazuh — [https://documentation.wazuh.com/current/](https://documentation.wazuh.com/current/)
 GLPI — [https://glpi-project.org/](https://glpi-project.org/)
@@ -197,26 +197,7 @@ All hosts: Zabbix + Wazuh agents; local firewall default‑deny; central logging
 
 ### 9) Validation Checklist ✅
 
-* [ ] **Overlay reachability** — From **W‑Link**, open each admin UI:
-  `https://10.10.10.1` (pfSense), `https://10.20.20.20` (Zabbix),
-  `https://10.20.20.30` (Wazuh), `https://10.20.20.40` (GLPI),
-  `https://10.20.20.50` (Windows), `smb://10.30.30.20` (Vault).
-* [ ] **DNS authority** — `dig @10.10.10.10 glpi.orcaz.lab +short` → **10.20.20.40** ;
-  `dig @10.10.10.10 zabbix.orcaz.lab +short` → **10.20.20.20** ;
-  `dig @10.10.10.10 winsrv.orcaz.lab +short` → **10.20.20.50**.
-* [ ] **Time sync** — domain members: `timedatectl` shows NTP **synchronized** (AD/pfSense source).
-* [ ] **SMB encryption** — `smbclient -L //10.30.30.20 -m SMB3 -e` reports **encryption = required**.
-* [ ] **Inter‑VLAN isolation** — from VLAN30 host: `nmap -Pn 10.20.20.0/24 -p 22,80,443,445,3389` → only expected ports; others **closed/filtered**.
-* [ ] **Monitoring/logging** — Zabbix **Latest data** populated; Wazuh **agents online**; pfSense syslog arrives; Windows logs via Wazuh.
-* [ ] **Backups** — `zfs list -t snapshot` shows today’s snapshot; last replication job **OK**.
-
----
-
-### 10) AIS REAC — 3 AT → 10 CP 🎓
-
-**AT1 – Administer & Secure (CP1–CP4)** — VLANs/DHCP/DNS on pfSense; Debian/Arch hardening & patching; KVM+ZFS basics; backup/export runbooks.
-**AT2 – Design & Implement (CP5–CP7)** — VLAN/IP plan, Zero‑Trust flows, deploying pfSense/AD/GLPI/Zabbix/Wazuh/Vault/Sentinel/WinSrv, integration tests.
-**AT3 – Cyberdefense (CP8–CP10)** — host firewalls & SMB encryption, DNS filtering, SIEM/monitoring with Wazuh/Zabbix, incident response & restore drills.
+-
 
 ---
 
@@ -233,18 +214,18 @@ All hosts: Zabbix + Wazuh agents; local firewall default‑deny; central logging
 > L’administration distante est référencée uniquement par le label codé **W‑Link**.
 
 **Docs officielles**
-Arch Linux — [https://wiki.archlinux.org/](https://wiki.archlinux.org/)
-KVM/QEMU — [https://www.qemu.org/](https://www.qemu.org/) · libvirt — [https://libvirt.org/](https://libvirt.org/)
-Debian — [https://www.debian.org/releases/](https://www.debian.org/releases/)
-OpenZFS — [https://openzfs.github.io/openzfs-docs/](https://openzfs.github.io/openzfs-docs/)
-Samba AD/DC — [https://wiki.samba.org/index.php/Setting\_up\_Samba\_as\_an\_Active\_Directory\_Domain\_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+pfSense — [https://docs.netgate.com/pfsense/en/latest/](https://docs.netgate.com/pfsense/en/latest/)
+Samba AD/DC — [https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 Zabbix — [https://www.zabbix.com/documentation/current/fr/manual/installation](https://www.zabbix.com/documentation/current/fr/manual/installation)
 Wazuh — [https://documentation.wazuh.com/current/](https://documentation.wazuh.com/current/)
 GLPI — [https://glpi-project.org/](https://glpi-project.org/)
+OpenZFS — [https://openzfs.github.io/openzfs-docs/](https://openzfs.github.io/openzfs-docs/)
 Pi-hole — [https://docs.pi-hole.net/](https://docs.pi-hole.net/)
 Headscale — [https://headscale.net/](https://headscale.net/)
 WireGuard — [https://www.wireguard.com/](https://www.wireguard.com/)
-pfSense — [https://docs.netgate.com/pfsense/en/latest/](https://docs.netgate.com/pfsense/en/latest/)
+KVM/QEMU — [https://www.qemu.org/](https://www.qemu.org/) · libvirt — [https://libvirt.org/](https://libvirt.org/)
+Debian — [https://www.debian.org/releases/](https://www.debian.org/releases/)
+Arch Linux — [https://wiki.archlinux.org/](https://wiki.archlinux.org/)
 Windows Server 2025 — [https://learn.microsoft.com/windows-server/](https://learn.microsoft.com/windows-server/)
 Alternative (Vault) : TrueNAS CORE — [https://www.truenas.com/docs/core/](https://www.truenas.com/docs/core/)
 
@@ -405,24 +386,120 @@ Règle **3‑2‑1** ; exports de config (pfSense, AD, GLPI/Zabbix/Wazuh) ; snap
 
 ### 9) Checklist de validation ✅
 
-* [ ] **Accès overlay** — Depuis **W‑Link**, ouvrir chaque UI :
-  `https://10.10.10.1` (pfSense), `https://10.20.20.20` (Zabbix),
-  `https://10.20.20.30` (Wazuh), `https://10.20.20.40` (GLPI),
-  `https://10.20.20.50` (Windows), `smb://10.30.30.20` (Vault).
-* [ ] **Autorité DNS** — `dig @10.10.10.10 glpi.orcaz.lab +short` → **10.20.20.40** ;
-  `dig @10.10.10.10 zabbix.orcaz.lab +short` → **10.20.20.20** ;
-  `dig @10.10.10.10 winsrv.orcaz.lab +short` → **10.20.20.50**.
-* [ ] **Synchronisation temps** — `timedatectl` indique **synchronized** (source AD/pfSense).
-* [ ] **Chiffrement SMB** — `smbclient -L //10.30.30.20 -m SMB3 -e` renvoie **encryption = required**.
-* [ ] **Isolement inter‑VLAN** — depuis VLAN30 : `nmap -Pn 10.20.20.0/24 -p 22,80,443,445,3389` → ports attendus ; autres **fermés/filtrés**.
-* [ ] **Supervision & logs** — Zabbix **Données récentes** non vides ; Wazuh **agents en ligne** ; syslog pfSense reçu ; logs Windows visibles.
-* [ ] **Sauvegardes** — `zfs list -t snapshot` montre le snapshot du jour ; dernière réplication **OK**.
+-
 
 ---
 
-### Licence 📜
+# Contributing 🤝 — EN 🇺🇸 / FR 🇫🇷
 
-MIT — contributions bienvenues.
+## 🇺🇸 English
 
+Thanks for taking the time to help improve **OrcaZ**. This lab is meant to be practical, reproducible, and easy to study. Small, focused contributions are welcome.
 
-✍️ *Développé par ZTr1∂n R.J. – 2025*
+### How to contribute
+- Open an issue 📝 for:
+  - 🐛 Bug reports (what happened, expected behavior, exact steps)
+  - 🌟 Feature ideas (what problem it solves, scope, impact)
+  - 📝 Documentation improvements (clarity, examples, tables)
+- Submit a pull request 🔄 from your fork.
+
+### Workflow
+1. Fork the repository.
+2. Create a branch:
+   - `feat/<short-topic>` for new features  
+   - `fix/<short-topic>` for fixes  
+   - `docs/<short-topic>` for documentation  
+   - `ops/<short-topic>` for ops, CI, or repo chores
+3. Make your changes and commit with short, descriptive messages:
+   - `feat: add pfSense VLAN policy table`
+   - `fix: correct Wazuh agent port in README`
+   - `docs: expand Debian 13 quick start`
+4. Open a PR and describe:
+   - What changed
+   - Why it matters
+   - Any testing steps
+
+### Pull Request checklist
+- Runs on **Arch Linux** (host) with **KVM/libvirt** (Debian 13 acceptable alternative).
+- No secrets, tokens, or private data included.
+- Documentation updated when behavior or steps change.
+- Tables and examples are clear and consistent with the README + Mermaid flows.
+- License notice: by contributing, you agree your code/docs are released under **MIT**.
+
+### Style for docs
+- US English in the 🇺🇸 section; French in the 🇫🇷 section.
+- Keep the tone simple and direct; prefer concrete steps over generic advice.
+- Use Markdown tables where they add clarity.
+- Keep emojis helpful and minimal.
+
+---   ZTr1∂n
+
+## 🇫🇷 Français
+
+Merci pour votre aide pour améliorer **OrcaZ**. Ce lab se veut pratique, reproductible et clair à étudier. Les contributions petites et ciblées sont les bienvenues.
+
+### Comment contribuer
+- Ouvrir une issue 📝 pour :
+  - 🐛 Rapports de bogues (ce qui s’est produit, le comportement attendu, les étapes exactes)
+  - 🌟 Idées d’amélioration (problème résolu, périmètre, impact)
+  - 📝 Améliorations de la documentation (clarté, exemples, tableaux)
+- Soumettre une pull request 🔄 depuis votre fork.
+
+### Flux de travail
+1. Forker le dépôt.
+2. Créer une branche :
+   - `feat/<sujet-court>` pour une nouvelle fonctionnalité  
+   - `fix/<sujet-court>` pour une correction  
+   - `docs/<sujet-court>` pour la documentation  
+   - `ops/<sujet-court>` pour l’exploitation, la CI ou l’entretien du dépôt
+3. Faire vos modifications et écrire des messages de commit courts et précis :
+   - `feat: ajouter le tableau de politique VLAN pfSense`
+   - `fix: corriger le port de l’agent Wazuh dans le README`
+   - `docs: étendre le démarrage rapide Debian 13`
+4. Ouvrir une PR en précisant :
+   - Ce qui change
+   - Pourquoi c’est utile
+   - Comment tester
+
+### Liste de contrôle pour la PR
+- Fonctionne sur **Arch Linux** (hôte) avec **KVM/libvirt** (Debian 13 en alternative).
+- Aucun secret, jeton ou donnée privée inclus.
+- Documentation mise à jour si le comportement ou les étapes changent.
+- Tables/exemples cohérents avec le README et les flux Mermaid.
+- Licence : en contribuant, vous acceptez que votre code/docs soient publiés sous licence **MIT**.
+
+### Style pour la documentation
+- Anglais US dans la section 🇺🇸 ; français dans la section 🇫🇷.
+- Ton simple et direct ; privilégier les étapes concrètes aux conseils généraux.
+- Utiliser des tableaux Markdown quand cela clarifie.
+- Émojis utiles et discrets.
+
+--- ZTr1∂n
+
+### License / Licence 📜
+
+**MIT License / Licence MIT**
+
+🇺🇸 **MIT License**
+
+Copyright (c) 2025 Raiden Jaafar
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+--- ZTr1∂n
+
+🇫🇷 **Licence MIT**
+
+Droit d’auteur © 2025 Raiden Jaafar
+
+La présente autorisation est accordée, gratuitement, à toute personne obtenant une copie de ce logiciel et des fichiers de documentation associés (le « Logiciel »), de traiter le Logiciel sans restriction, y compris sans limitation les droits d’utiliser, copier, modifier, fusionner, publier, distribuer, sous‑licencier et/ou vendre des copies du Logiciel, et de permettre aux personnes auxquelles le Logiciel est fourni de le faire, sous réserve des conditions suivantes :
+
+L’avis de droit d’auteur ci‑dessus et l’avis de permission ci‑dessus doivent être inclus dans toutes les copies ou parties substantielles du Logiciel.
+
+LE LOGICIEL EST FOURNI « EN L’ÉTAT », SANS GARANTIE D’AUCUNE SORTE, EXPRESSE OU IMPLICITE, Y COMPRIS MAIS SANS S’Y LIMITER LES GARANTIES DE QUALITÉ MARCHANDE, D’ADÉQUATION À UN USAGE PARTICULIER ET D’ABSENCE DE CONTREFAÇON. EN AUCUN CAS LES AUTEURS OU TITULAIRES DU DROIT D’AUTEUR NE POURRONT ÊTRE TENUS POUR RESPONSABLES DE TOUTE RÉCLAMATION, DOMMAGE OU AUTRE RESPONSABILITÉ, QUE CE SOIT DANS LE CADRE D’UNE ACTION CONTRACTUELLE, DÉLICTUELLE OU AUTRE, DÉCOULANT DE, OU EN RELATION AVEC, LE LOGICIEL OU L’UTILISATION OU D’AUTRES INTERACTIONS AVEC LE LOGICIEL.
+
+--- ZTr1∂n
