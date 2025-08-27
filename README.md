@@ -22,7 +22,7 @@ Arch Linux — [https://wiki.archlinux.org/](https://wiki.archlinux.org/)
 KVM/QEMU — [https://www.qemu.org/](https://www.qemu.org/) · libvirt — [https://libvirt.org/](https://libvirt.org/)
 Debian — [https://www.debian.org/releases/](https://www.debian.org/releases/)
 OpenZFS — [https://openzfs.github.io/openzfs-docs/](https://openzfs.github.io/openzfs-docs/)
-Samba AD/DC — [https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+Samba AD/DC — [https://wiki.samba.org/index.php/Setting\_up\_Samba\_as\_an\_Active\_Directory\_Domain\_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 Zabbix — [https://www.zabbix.com/documentation/current/en/manual/installation](https://www.zabbix.com/documentation/current/en/manual/installation)
 Wazuh — [https://documentation.wazuh.com/current/](https://documentation.wazuh.com/current/)
 GLPI — [https://glpi-project.org/](https://glpi-project.org/)
@@ -197,7 +197,7 @@ All hosts: Zabbix + Wazuh agents; local firewall default‑deny; central logging
 
 ### 9) Validation Checklist ✅
 
--
+*
 
 ---
 
@@ -215,7 +215,7 @@ All hosts: Zabbix + Wazuh agents; local firewall default‑deny; central logging
 
 **Docs officielles**
 pfSense — [https://docs.netgate.com/pfsense/en/latest/](https://docs.netgate.com/pfsense/en/latest/)
-Samba AD/DC — [https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+Samba AD/DC — [https://wiki.samba.org/index.php/Setting\_up\_Samba\_as\_an\_Active\_Directory\_Domain\_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 Zabbix — [https://www.zabbix.com/documentation/current/fr/manual/installation](https://www.zabbix.com/documentation/current/fr/manual/installation)
 Wazuh — [https://documentation.wazuh.com/current/](https://documentation.wazuh.com/current/)
 GLPI — [https://glpi-project.org/](https://glpi-project.org/)
@@ -386,7 +386,7 @@ Règle **3‑2‑1** ; exports de config (pfSense, AD, GLPI/Zabbix/Wazuh) ; snap
 
 ### 9) Checklist de validation ✅
 
--
+*
 
 ---
 
@@ -397,84 +397,100 @@ Règle **3‑2‑1** ; exports de config (pfSense, AD, GLPI/Zabbix/Wazuh) ; snap
 Thanks for taking the time to help improve **OrcaZ**. This lab is meant to be practical, reproducible, and easy to study. Small, focused contributions are welcome.
 
 ### How to contribute
-- Open an issue 📝 for:
-  - 🐛 Bug reports (what happened, expected behavior, exact steps)
-  - 🌟 Feature ideas (what problem it solves, scope, impact)
-  - 📝 Documentation improvements (clarity, examples, tables)
-- Submit a pull request 🔄 from your fork.
+
+* Open an issue 📝 for:
+
+  * 🐛 Bug reports (what happened, expected behavior, exact steps)
+  * 🌟 Feature ideas (what problem it solves, scope, impact)
+  * 📝 Documentation improvements (clarity, examples, tables)
+* Submit a pull request 🔄 from your fork.
 
 ### Workflow
+
 1. Fork the repository.
 2. Create a branch:
-   - `feat/<short-topic>` for new features  
-   - `fix/<short-topic>` for fixes  
-   - `docs/<short-topic>` for documentation  
-   - `ops/<short-topic>` for ops, CI, or repo chores
+
+   * `feat/<short-topic>` for new features
+   * `fix/<short-topic>` for fixes
+   * `docs/<short-topic>` for documentation
+   * `ops/<short-topic>` for ops, CI, or repo chores
 3. Make your changes and commit with short, descriptive messages:
-   - `feat: add pfSense VLAN policy table`
-   - `fix: correct Wazuh agent port in README`
-   - `docs: expand Debian 13 quick start`
+
+   * `feat: add pfSense VLAN policy table`
+   * `fix: correct Wazuh agent port in README`
+   * `docs: expand Debian 13 quick start`
 4. Open a PR and describe:
-   - What changed
-   - Why it matters
-   - Any testing steps
+
+   * What changed
+   * Why it matters
+   * Any testing steps
 
 ### Pull Request checklist
-- Runs on **Arch Linux** (host) with **KVM/libvirt** (Debian 13 acceptable alternative).
-- No secrets, tokens, or private data included.
-- Documentation updated when behavior or steps change.
-- Tables and examples are clear and consistent with the README + Mermaid flows.
-- License notice: by contributing, you agree your code/docs are released under **MIT**.
+
+* Runs on **Arch Linux** (host) with **KVM/libvirt** (Debian 13 acceptable alternative).
+* No secrets, tokens, or private data included.
+* Documentation updated when behavior or steps change.
+* Tables and examples are clear and consistent with the README + Mermaid flows.
+* License notice: by contributing, you agree your code/docs are released under **MIT**.
 
 ### Style for docs
-- US English in the 🇺🇸 section; French in the 🇫🇷 section.
-- Keep the tone simple and direct; prefer concrete steps over generic advice.
-- Use Markdown tables where they add clarity.
-- Keep emojis helpful and minimal.
 
----   ZTr1∂n
+* US English in the 🇺🇸 section; French in the 🇫🇷 section.
+* Keep the tone simple and direct; prefer concrete steps over generic advice.
+* Use Markdown tables where they add clarity.
+* Keep emojis helpful and minimal.
+
+\---   ZTr1∂n
 
 ## 🇫🇷 Français
 
 Merci pour votre aide pour améliorer **OrcaZ**. Ce lab se veut pratique, reproductible et clair à étudier. Les contributions petites et ciblées sont les bienvenues.
 
 ### Comment contribuer
-- Ouvrir une issue 📝 pour :
-  - 🐛 Rapports de bogues (ce qui s’est produit, le comportement attendu, les étapes exactes)
-  - 🌟 Idées d’amélioration (problème résolu, périmètre, impact)
-  - 📝 Améliorations de la documentation (clarté, exemples, tableaux)
-- Soumettre une pull request 🔄 depuis votre fork.
+
+* Ouvrir une issue 📝 pour :
+
+  * 🐛 Rapports de bogues (ce qui s’est produit, le comportement attendu, les étapes exactes)
+  * 🌟 Idées d’amélioration (problème résolu, périmètre, impact)
+  * 📝 Améliorations de la documentation (clarté, exemples, tableaux)
+* Soumettre une pull request 🔄 depuis votre fork.
 
 ### Flux de travail
+
 1. Forker le dépôt.
 2. Créer une branche :
-   - `feat/<sujet-court>` pour une nouvelle fonctionnalité  
-   - `fix/<sujet-court>` pour une correction  
-   - `docs/<sujet-court>` pour la documentation  
-   - `ops/<sujet-court>` pour l’exploitation, la CI ou l’entretien du dépôt
+
+   * `feat/<sujet-court>` pour une nouvelle fonctionnalité
+   * `fix/<sujet-court>` pour une correction
+   * `docs/<sujet-court>` pour la documentation
+   * `ops/<sujet-court>` pour l’exploitation, la CI ou l’entretien du dépôt
 3. Faire vos modifications et écrire des messages de commit courts et précis :
-   - `feat: ajouter le tableau de politique VLAN pfSense`
-   - `fix: corriger le port de l’agent Wazuh dans le README`
-   - `docs: étendre le démarrage rapide Debian 13`
+
+   * `feat: ajouter le tableau de politique VLAN pfSense`
+   * `fix: corriger le port de l’agent Wazuh dans le README`
+   * `docs: étendre le démarrage rapide Debian 13`
 4. Ouvrir une PR en précisant :
-   - Ce qui change
-   - Pourquoi c’est utile
-   - Comment tester
+
+   * Ce qui change
+   * Pourquoi c’est utile
+   * Comment tester
 
 ### Liste de contrôle pour la PR
-- Fonctionne sur **Arch Linux** (hôte) avec **KVM/libvirt** (Debian 13 en alternative).
-- Aucun secret, jeton ou donnée privée inclus.
-- Documentation mise à jour si le comportement ou les étapes changent.
-- Tables/exemples cohérents avec le README et les flux Mermaid.
-- Licence : en contribuant, vous acceptez que votre code/docs soient publiés sous licence **MIT**.
+
+* Fonctionne sur **Arch Linux** (hôte) avec **KVM/libvirt** (Debian 13 en alternative).
+* Aucun secret, jeton ou donnée privée inclus.
+* Documentation mise à jour si le comportement ou les étapes changent.
+* Tables/exemples cohérents avec le README et les flux Mermaid.
+* Licence : en contribuant, vous acceptez que votre code/docs soient publiés sous licence **MIT**.
 
 ### Style pour la documentation
-- Anglais US dans la section 🇺🇸 ; français dans la section 🇫🇷.
-- Ton simple et direct ; privilégier les étapes concrètes aux conseils généraux.
-- Utiliser des tableaux Markdown quand cela clarifie.
-- Émojis utiles et discrets.
 
---- ZTr1∂n
+* Anglais US dans la section 🇺🇸 ; français dans la section 🇫🇷.
+* Ton simple et direct ; privilégier les étapes concrètes aux conseils généraux.
+* Utiliser des tableaux Markdown quand cela clarifie.
+* Émojis utiles et discrets.
+
+\--- ZTr1∂n
 
 ### License / Licence 📜
 
@@ -490,7 +506,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---- ZTr1∂n
+\--- ZTr1∂n
 
 🇫🇷 **Licence MIT**
 
@@ -502,4 +518,4 @@ L’avis de droit d’auteur ci‑dessus et l’avis de permission ci‑dessus d
 
 LE LOGICIEL EST FOURNI « EN L’ÉTAT », SANS GARANTIE D’AUCUNE SORTE, EXPRESSE OU IMPLICITE, Y COMPRIS MAIS SANS S’Y LIMITER LES GARANTIES DE QUALITÉ MARCHANDE, D’ADÉQUATION À UN USAGE PARTICULIER ET D’ABSENCE DE CONTREFAÇON. EN AUCUN CAS LES AUTEURS OU TITULAIRES DU DROIT D’AUTEUR NE POURRONT ÊTRE TENUS POUR RESPONSABLES DE TOUTE RÉCLAMATION, DOMMAGE OU AUTRE RESPONSABILITÉ, QUE CE SOIT DANS LE CADRE D’UNE ACTION CONTRACTUELLE, DÉLICTUELLE OU AUTRE, DÉCOULANT DE, OU EN RELATION AVEC, LE LOGICIEL OU L’UTILISATION OU D’AUTRES INTERACTIONS AVEC LE LOGICIEL.
 
---- ZTr1∂n
+\--- ZTr1∂n
