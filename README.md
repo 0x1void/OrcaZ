@@ -1,433 +1,428 @@
-# 🛡️ SentryX – Secure Virtual Infrastructure Lab 🚀
+# ⚡🐋 OrcaZ — Zero-Trust Lab Infrastructure
 
-![Arch Linux](https://img.shields.io/badge/Arch%20Linux-rolling-blue?logo=archlinux) ![KVM/QEMU](https://img.shields.io/badge/KVM%2FQEMU-virtualization-333?logo=qemu) ![libvirt](https://img.shields.io/badge/libvirt-enabled-4c9) ![pfSense](https://img.shields.io/badge/pfSense-firewall-1f4a7f?logo=pfsense) ![Windows Server 2025](https://img.shields.io/badge/Windows%20Server-2025-0078d6?logo=windows) ![Debian](https://img.shields.io/badge/Debian-GLPI%2FZabbix%2FWazuh-a80030?logo=debian) ![TrueNAS](https://img.shields.io/badge/TrueNAS-CORE-0b6aa2?logo=truenas) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-
----
-
-## 🇺🇸 English — Project Overview
-
-SentryX is a **virtualized cybersecurity lab** on a single Arch Linux host using **KVM/QEMU + libvirt**. It reproduces a **practical enterprise environment** with a firewall, an AD domain, service servers (GLPI, Zabbix, Wazuh), a NAS (TrueNAS), and a client network — all segmented by VLANs with strict rules.
-
-### 🎯 Goals
-
-* Build a **segmented, secure, and reproducible** lab.
-* Operate **enterprise-grade services**: AD/DNS, GLPI, Zabbix, Wazuh, TrueNAS.
-* Apply **best practices** (VLANs, hardening, centralized logging & monitoring).
-* Demonstrate **AIS REAC coverage** (CP1–CP10) through concrete tasks.
-* Provide **clear documentation** and a coherent **addressing plan**.
+![Arch Linux](https://img.shields.io/badge/Arch%20Linux-rolling-blue?logo=archlinux) ![KVM/QEMU](https://img.shields.io/badge/KVM%2FQEMU-virtualization-333?logo=qemu) ![libvirt](https://img.shields.io/badge/libvirt-enabled-4c9) ![pfSense](https://img.shields.io/badge/pfSense-firewall-1f4a7f?logo=pfsense) ![Samba](https://img.shields.io/badge/Samba-AD%2FDC-ffb400?logo=samba) ![Windows Server 2025](https://img.shields.io/badge/Windows%20Server-2025-0078d6?logo=windows)
+![Debian](https://img.shields.io/badge/Debian-GLPI%2FZabbix%2FWazuh-a80030?logo=debian) ![TrueNAS](https://img.shields.io/badge/TrueNAS-CORE-0b6aa2?logo=truenas) ![Pi-hole](https://img.shields.io/badge/Pi--hole-DNS%20filtering-a41f1f?logo=pi-hole) ![Headscale](https://img.shields.io/badge/Headscale-identity%20overlay-444) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ---
 
-## 🧩 Host Platform (Hypervisor)
+## 🇺🇸 ⚡🐋
 
-* **Host OS:** Arch Linux (rolling)
-* **Virtualization:** KVM/QEMU, libvirt (virt-manager for UI)
-* **vNICs:** virtio (paravirtualized)
-* **vDisks:** virtio, `qcow2` images (SSD-backed)
-* **Bridging:** Linux bridge for VLAN trunk to pfSense, per-VLAN attachment for VMs
+### 1) Overview 🚀
 
----
+**OrcaZ** is a compact, exam‑ready lab: **VLAN‑segmented**, **identity‑first**, and **observable**. To keep the virtual host light, two core roles run on **dedicated bare‑metal Linux** (names intentionally hidden):
 
-## 🖥️ Virtual Machines
+* **Vault** — storage: **OpenZFS + Samba/NFS** (files, backups, snapshots).
+* **Sentinel** — control: **Headscale** (identity overlay) + **Pi-hole** (DNS filter).
+* **Virtualized** — **pfSense**, **Samba AD/DNS**, **Zabbix**, **Wazuh**, **GLPI**, **Windows Server 2025** (exam requirement).
 
-| Virtual Machine     | OS (Version)               | vCPUs |  RAM  |  Disk | Purpose                                     |
-| ------------------- | -------------------------- | :---: | :---: | :---: | ------------------------------------------- |
-| pfSense (Firewall)  | pfSense CE 2.8.1 (FreeBSD) |   2   |  4 GB | 20 GB | Perimeter FW, inter-VLAN routing, DHCP, NTP |
-| Windows Server (DC) | Windows Server 2025 (24H2) |   4   |  8 GB | 60 GB | AD DS, DNS, GPO, domain time source         |
-| GLPI                | Debian 13 + GLPI 10.0.19   |   2   |  4 GB | 20 GB | Helpdesk, inventory agent, AD auth          |
-| Zabbix              | Debian 13 + Zabbix 7.0 LTS |   4   |  8 GB | 20 GB | Monitoring (agents on all VMs)              |
-| Wazuh               | Debian 13 + Wazuh 4.12.0   |   4   |  8 GB | 20 GB | SIEM/XDR: log collection, rules, alerts     |
-| TrueNAS CORE (NAS)  | TrueNAS CORE 13 (FreeBSD)  |   4   | 16 GB | 60 GB | ZFS storage, SMB/NFS shares, snapshots      |
+> Remote administration is referenced only by the coded label **W-Link**.
 
-> Allocation exceeds vendor minimums to keep the lab responsive under load.
-
----
-
-## 🌐 Network Design
-
-### VLANs & Addressing
-
-| VLAN | Name              | Subnet/CIDR   | Gateway    | DHCP Pool                 | Key Hosts (Static)                                   |
-| :--: | ----------------- | ------------- | ---------- | ------------------------- | ---------------------------------------------------- |
-|  10  | Infrastructure    | 10.10.10.0/24 | 10.10.10.1 | 10.10.10.100–10.10.10.199 | pfSense: 10.10.10.1 · DC (AD/DNS): 10.10.10.10       |
-|  20  | Services          | 10.20.20.0/24 | 10.20.20.1 | 10.20.20.100–10.20.20.199 | GLPI: 10.20.20.20 · Zabbix: 10.20.20.30 · Wazuh: .40 |
-|  30  | Clients & Storage | 10.30.30.0/24 | 10.30.30.1 | 10.30.30.100–10.30.30.199 | TrueNAS: 10.30.30.10 · Win Client: 10.30.30.100      |
-
-**Domain & DNS**
-
-* **AD Domain:** `sentryx.lab`
-* **DNS (authoritative):** 10.10.10.10 (DC); pfSense forwards upstream.
-* **DHCP Options:** Router (VLAN GW), DNS = 10.10.10.10, Domain = `sentryx.lab`
-
-**NTP**
-
-* pfSense serves NTP (upstream pool.ntp.org).
-* Domain members sync via the DC (Windows hierarchy).
-
-**Routing & NAT**
-
-* Inter-VLAN routing on pfSense.
-* Outbound NAT (automatic) for Internet access.
-
-**Firewall Policy (summary)**
-
-* VLAN 10 → others: management (RDP/SSH/HTTPS) + AD/DNS.
-* VLAN 20 → VLAN 10: AD/DNS/LDAP/Kerberos only; block unsolicited inbound.
-* VLAN 30 → VLAN 10/20: domain join, GLPI (HTTPS), monitoring agents; deny admin ports.
-
-**Service Ports (reference)**
-
-* **AD/DC:** DNS 53 TCP/UDP · LDAP 389 TCP · Kerberos 88 TCP/UDP · SMB 445 TCP · RDP 3389 TCP
-* **GLPI:** 443 TCP
-* **Zabbix:** 10051 TCP (server), 10050 TCP (agents)
-* **Wazuh:** 1514 UDP (logs), 55000 TCP (API/registration)
-* **TrueNAS:** SMB 445 TCP · NFS 2049 TCP (+ dynamic ports)
+**Stack (official docs)**
+Arch Linux — [https://wiki.archlinux.org/](https://wiki.archlinux.org/)
+KVM/QEMU — [https://www.qemu.org/](https://www.qemu.org/) · libvirt — [https://libvirt.org/](https://libvirt.org/)
+Debian — [https://www.debian.org/releases/](https://www.debian.org/releases/)
+OpenZFS — [https://openzfs.github.io/openzfs-docs/](https://openzfs.github.io/openzfs-docs/)
+Samba AD/DC — [https://wiki.samba.org/index.php/Setting\_up\_Samba\_as\_an\_Active\_Directory\_Domain\_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+Zabbix — [https://www.zabbix.com/documentation/current/en/manual/installation](https://www.zabbix.com/documentation/current/en/manual/installation)
+Wazuh — [https://documentation.wazuh.com/current/](https://documentation.wazuh.com/current/)
+GLPI — [https://glpi-project.org/](https://glpi-project.org/)
+Pi-hole — [https://docs.pi-hole.net/](https://docs.pi-hole.net/)
+Headscale — [https://headscale.net/](https://headscale.net/)
+WireGuard — [https://www.wireguard.com/](https://www.wireguard.com/)
+pfSense — [https://docs.netgate.com/pfsense/en/latest/](https://docs.netgate.com/pfsense/en/latest/)
+Windows Server 2025 — [https://learn.microsoft.com/windows-server/](https://learn.microsoft.com/windows-server/)
+Optional alt (Vault): TrueNAS CORE — [https://www.truenas.com/docs/core/](https://www.truenas.com/docs/core/)
 
 ---
 
-## 🔐 Identity & Access (AD)
+### 2) Network & Addressing 🌐
 
-**OU Structure (example)**
+Examples use **10.x.x.x/24** per VLAN for clarity. You can also use **172.16.0.0/12** or **192.168.0.0/16**, with CIDR sizes as needed (/27, /23, /22…).
 
-```
-OU=Admins
-OU=Servers
-OU=Workstations
-OU=ServiceAccounts
-OU=Groups
-```
+| VLAN | Name      | Subnet/CIDR   | Gateway    | DHCP Pool                 | Key Static Hosts                                                                               |
+| :--: | --------- | ------------- | ---------- | ------------------------- | ---------------------------------------------------------------------------------------------- |
+|  10  | CoreNet   | 10.10.10.0/24 | 10.10.10.1 | 10.10.10.100–10.10.10.199 | **pfSense** 10.10.10.1 • **AD/DNS** 10.10.10.10 • **Sentinel** 10.10.10.2                      |
+|  20  | OpsNet    | 10.20.20.0/24 | 10.20.20.1 | 10.20.20.100–10.20.20.199 | **Zabbix** 10.20.20.20 • **Wazuh** 10.20.20.30 • **GLPI** 10.20.20.40 • **WinSrv** 10.20.20.50 |
+|  30  | ClientNet | 10.30.30.0/24 | 10.30.30.1 | 10.30.30.100–10.30.30.199 | **Vault** 10.30.30.20                                                                          |
 
-**Key Groups**
-
-* `GRP-Admins-Domain`
-* `GRP-Zabbix-Agents`
-* `GRP-Wazuh-Agents`
-* `GRP-GLPI-Users`
-
-**GPO Highlights**
-
-* Baseline hardening (password policy, lock screen, SMB signing).
-* NTP per domain hierarchy.
-* Windows Firewall with rules aligned to lab ports.
-* DNS client = 10.10.10.10.
+**Domain/DNS:** `orcaz.lab` (AD/DNS 10.10.10.10).
+**DNS path:** AD/DNS → Sentinel (filter) → upstream DoH/DoT.
+**NTP:** pfSense ↔ pool.ntp.org; domain members via AD.
 
 ---
 
-## 🗃️ Storage Design (TrueNAS / ZFS)
-
-**Pool:** `tank`
-**Datasets & shares**
-
-* `tank/shares/it` → SMB `\\truenas\it`
-* `tank/backups` → SMB `\\truenas\backups`
-* `tank/homes` → SMB home directories (optional)
-
-**Snapshots**
-
-* Hourly (24), Daily (7), Weekly (4).
-
-**Permissions**
-
-* SMB with ACLs; admin shares limited to VLAN 10.
-
----
-
-## 🛠️ Services Configuration
-
-**GLPI** — `https://glpi.sentryx.lab`
-
-* AD LDAP bind to 10.10.10.10, sync users/groups.
-* GLPI Agent for asset/software inventory.
-
-**Zabbix** — `https://zabbix.sentryx.lab`
-
-* Agents on Windows/Debian/FreeBSD hosts.
-* Templates: OS, FS, NIC, CPU/RAM.
-* Triggers: high CPU, low disk, agent unreachable.
-
-**Wazuh** — `https://wazuh.sentryx.lab`
-
-* Agents on all VMs; watch Windows Events, auth, sudo, SSH.
-* Rules: failed auth thresholds, privilege escalation, suspicious processes.
-
----
-
-## 🔍 Monitoring & SIEM — Data Flow
-
-* **Windows Server →** Zabbix agent + Wazuh agent (Event Logs).
-* **Debian servers →** Zabbix agent + Wazuh agent (syslog/auth).
-* **pfSense →** Zabbix (SNMP/agent) + syslog to Wazuh.
-* **TrueNAS →** Zabbix (agent/SNMP) + syslog to Wazuh.
-
----
-
-## 🧪 Incident Scenario (sample)
-
-Repeated failed logins on a Windows client (VLAN 30) followed by a successful login from an unusual source.
-**Expected outcome:** Wazuh brute-force alert, Zabbix event spikes, admin validates source IP and locks the account or resets password in AD.
-
----
-
-## 🔧 pfSense & libvirt Mapping
-
-* **pfSense NICs:** `WAN` (bridged to uplink), `LAN-TRUNK` (virtio on Linux bridge, tagged VLANs 10/20/30)
-* **pfSense VLAN IFs:** VLAN10 = 10.10.10.1/24 · VLAN20 = 10.20.20.1/24 · VLAN30 = 10.30.30.1/24
-* **VM NICs:** attached to their target VLAN (tagged or per-VLAN bridge)
-
----
-
-## 📊 REAC (AIS) Mapping
-
-| REAC (AT/CP)       | SentryX Implementation                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------ |
-| **AT1 (CP1–CP4)**  | pfSense VLANs & firewall, OS updates, hardening, Wazuh agents, ZFS ACLs                    |
-| **AT2 (CP5–CP7)**  | Deploy AD/DNS, GLPI (AD auth), Zabbix; design VLANs; integrate TrueNAS backups             |
-| **AT3 (CP8–CP10)** | Centralized monitoring (Zabbix), SIEM (Wazuh), incident analysis & response, documentation |
-
----
-
-## 🔗 Service Endpoints
-
-* pfSense: `https://10.10.10.1`
-* DC (AD/DNS): `dc1.sentryx.lab`
-* GLPI: `https://glpi.sentryx.lab`
-* Zabbix: `https://zabbix.sentryx.lab`
-* Wazuh: `https://wazuh.sentryx.lab`
-* TrueNAS: `https://truenas.sentryx.lab`
-
----
-
-## 📄 License (MIT)
-
-Copyright © 2025 **ZTr1∂n R.J.**
-This project is licensed under the **MIT License**. See the [Licence.md](https://github.com/0x1void/SentryX/blob/main/Licence.md) file for details.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome. See the [CONTRIBUTING.md](https://github.com/0x1void/SentryX/blob/main/CONTRIBUTING.md) file for details.
-
-* **Issues:** Open an issue describing the change or problem.
-* **Fork & Branch:** `feat/…` or `fix/…` branch naming.
-* **Commits:** Clear, concise messages.
-* **PRs:** One topic per PR, with a short rationale and test notes.
-  By contributing, you agree your work will be licensed under the project’s **MIT License**.
-
----
-
-✍️ *Développé par ZTr1∂n R.J. – 2025*
-
----
-
-# 🇫🇷 Français — Aperçu du projet
-
-SentryX est un **laboratoire de cybersécurité virtualisé** sur une machine Arch Linux avec **KVM/QEMU + libvirt**. Il reproduit un **environnement d’entreprise concret** : pare-feu, domaine AD, serveurs de services (GLPI, Zabbix, Wazuh), NAS (TrueNAS) et réseau clients — le tout segmenté en VLANs avec des règles strictes.
-
-### 🎯 Objectifs
-
-* Construire un lab **segmenté, sécurisé et reproductible**.
-* Exploiter des **services professionnels** : AD/DNS, GLPI, Zabbix, Wazuh, TrueNAS.
-* Appliquer les **bonnes pratiques** (VLANs, durcissement, logs & supervision centralisés).
-* Montrer la **couverture REAC AIS** (CP1–CP10) via des tâches concrètes.
-* Fournir une **documentation claire** et un **plan d’adressage** cohérent.
-
----
-
-## 🧩 Plateforme hôte (Hyperviseur)
-
-* **OS hôte :** Arch Linux (rolling)
-* **Virtualisation :** KVM/QEMU, libvirt (virt-manager)
-* **vNICs :** virtio (paravirtualisées)
-* **vDisks :** virtio, images `qcow2` (SSD)
-* **Bridging :** pont Linux pour le trunk VLAN vers pfSense, attachement par VLAN pour les VMs
-
----
-
-## 🖥️ Machines virtuelles
-
-| Machine virtuelle   | OS (Version)               | vCPU |  RAM  | Disque | Rôle                                         |
-| ------------------- | -------------------------- | :--: | :---: | :----: | -------------------------------------------- |
-| pfSense (Pare-feu)  | pfSense CE 2.8.1 (FreeBSD) |   2  |  4 Go |  20 Go | Pare-feu, routage inter-VLAN, DHCP, NTP      |
-| Windows Server (DC) | Windows Server 2025 (24H2) |   4  |  8 Go |  60 Go | AD DS, DNS, GPO, source de temps du domaine  |
-| GLPI                | Debian 13 + GLPI 10.0.19   |   2  |  4 Go |  20 Go | Helpdesk, inventaire, auth AD                |
-| Zabbix              | Debian 13 + Zabbix 7.0 LTS |   4  |  8 Go |  20 Go | Supervision (agents sur toutes les VMs)      |
-| Wazuh               | Debian 13 + Wazuh 4.12.0   |   4  |  8 Go |  20 Go | SIEM/XDR : collecte de logs, règles, alertes |
-| TrueNAS CORE (NAS)  | TrueNAS CORE 13 (FreeBSD)  |   4  | 16 Go |  60 Go | Stockage ZFS, partages SMB/NFS, snapshots    |
-
----
-
-## 🌐 Conception réseau
-
-### VLANs & adressage
-
-| VLAN | Nom                | Sous-réseau   | Passerelle | Plage DHCP                | Hôtes clés (statique)                                   |
-| :--: | ------------------ | ------------- | ---------- | ------------------------- | ------------------------------------------------------- |
-|  10  | Infrastructure     | 10.10.10.0/24 | 10.10.10.1 | 10.10.10.100–10.10.10.199 | pfSense : 10.10.10.1 · DC (AD/DNS) : 10.10.10.10        |
-|  20  | Services           | 10.20.20.0/24 | 10.20.20.1 | 10.20.20.100–10.20.20.199 | GLPI : 10.20.20.20 · Zabbix : 10.20.20.30 · Wazuh : .40 |
-|  30  | Clients & Stockage | 10.30.30.0/24 | 10.30.30.1 | 10.30.30.100–10.30.30.199 | TrueNAS : 10.30.30.10 · Client Windows : 10.30.30.100   |
-
-**Domaine & DNS**
-
-* **Domaine AD :** `sentryx.lab`
-* **DNS (autoritatif) :** 10.10.10.10 (DC) ; pfSense redirige en amont.
-* **Options DHCP :** Passerelle (VLAN), DNS = 10.10.10.10, Domaine = `sentryx.lab`
-
-**NTP**
-
-* pfSense sert de NTP (amont : pool.ntp.org).
-* Les membres du domaine se synchronisent via le DC.
-
-**Routage & NAT**
-
-* Routage inter-VLAN via pfSense.
-* NAT sortant automatique vers Internet.
-
-**Règles de pare-feu (synthèse)**
-
-* VLAN 10 → autres : administration (RDP/SSH/HTTPS) + AD/DNS.
-* VLAN 20 → VLAN 10 : AD/DNS/LDAP/Kerberos uniquement ; pas d’entrant non sollicité.
-* VLAN 30 → VLAN 10/20 : jonction au domaine, GLPI (HTTPS), agents de supervision ; pas de ports d’admin.
-
-**Ports (référence)**
-
-* **AD/DC :** DNS 53 TCP/UDP · LDAP 389 TCP · Kerberos 88 TCP/UDP · SMB 445 TCP · RDP 3389 TCP
-* **GLPI :** 443 TCP
-* **Zabbix :** 10051 TCP (serveur), 10050 TCP (agents)
-* **Wazuh :** 1514 UDP (logs), 55000 TCP (API/enrôlement)
-* **TrueNAS :** SMB 445 TCP · NFS 2049 TCP (+ dynamiques)
-
----
-
-## 🔐 Identité & accès (AD)
-
-**Structure d’OU (exemple)**
-
-```
-OU=Admins
-OU=Servers
-OU=Workstations
-OU=ServiceAccounts
-OU=Groups
+### 3) Blueprint 🧭 — detailed Mermaid (GitHub‑safe)
+
+```mermaid
+flowchart TB
+  %% ===== ZONES =====
+  subgraph VLAN10["VLAN10 • CoreNet (10.10.10.0/24)"]
+    PF["pfSense
+10.10.10.1"]
+    DC["Samba AD/DNS
+10.10.10.10"]
+    SEN["Sentinel
+(overlay + DNS filter)
+10.10.10.2"]
+  end
+  subgraph VLAN20["VLAN20 • OpsNet (10.20.20.0/24)"]
+    ZB["Zabbix
+10.20.20.20"]
+    WZ["Wazuh
+10.20.20.30"]
+    GP["GLPI
+10.20.20.40"]
+    WS["Windows Server 2025
+10.20.20.50"]
+  end
+  subgraph VLAN30["VLAN30 • ClientNet (10.30.30.0/24)"]
+    VA["Vault (OpenZFS + SMB/NFS)
+10.30.30.20"]
+  end
+  subgraph WL["W-Link • identity overlay (mgmt only)"]
+    ADM["Admin workstation"]
+  end
+
+  %% ===== CORE LINKS =====
+  PF --- DC
+  PF --- ZB
+  PF --- WZ
+  PF --- GP
+  PF --- WS
+  PF --- VA
+  DC --- VA
+  DC --- WS
+
+  %% ===== ALLOWED FLOWS =====
+  ZB -- "DNS 53" --> DC
+  WZ -- "DNS 53" --> DC
+  GP -- "LDAP/LDAPS 389/636, Kerberos 88/464, DNS 53" --> DC
+  WS -- "LDAP/LDAPS 389/636, Kerberos 88/464, DNS 53" --> DC
+  VA <-- "SMB 445 (encryption req.) / NFS (opt)" --> PF
+  DC -- "DNS forward" --> SEN
+  SEN -- "Upstream DoH/DoT" --> PF
+  PF -- "NTP 123" --> DC
+  DC -- "Zabbix agent → 10051/10050" --> ZB
+  PF -- "Syslog 514/UDP" --> WZ
+  DC -- "Winlogbeat/OSSEC → Wazuh" --> WZ
+  GP -- "API/DB telemetry" --> ZB
+  VA -- "Zabbix/Wazuh agents" --> ZB
+  WS -- "Zabbix/Wazuh agents" --> ZB
+
+  %% ===== OVERLAY MGMT (dashed) =====
+  ADM -. "mgmt HTTPS/SSH/RDP/SMB over W-Link" .-> PF
+  ADM -. "mgmt" .-> DC
+  ADM -. "mgmt" .-> ZB
+  ADM -. "mgmt" .-> WZ
+  ADM -. "mgmt" .-> GP
+  ADM -. "mgmt" .-> WS
+  ADM -. "mgmt" .-> VA
 ```
 
-**Groupes clés**
+**ASCII fallback**
 
-* `GRP-Admins-Domain`
-* `GRP-Zabbix-Agents`
-* `GRP-Wazuh-Agents`
-* `GRP-GLPI-Users`
-
-**Points GPO**
-
-* Durcissement de base (politique de mot de passe, verrouillage, SMB signing).
-* NTP conforme à la hiérarchie de domaine.
-* Pare-feu Windows actif avec règles alignées sur les ports du lab.
-* DNS client = 10.10.10.10.
-
----
-
-## 🗃️ Stockage (TrueNAS / ZFS)
-
-**Pool :** `tank`
-**Datasets & partages**
-
-* `tank/shares/it` → SMB `\\truenas\it`
-* `tank/backups` → SMB `\\truenas\backups`
-* `tank/homes` → répertoires personnels (option)
-
-**Snapshots**
-
-* Horaire (24), quotidien (7), hebdomadaire (4).
-
-**Permissions**
-
-* ACLs fines ; partages admin limités au VLAN 10.
+```text
+W-Link (Admin) --> [ pfSense 10.10.10.1 ]
+                      |-- [ AD/DNS 10.10.10.10 ]
+                      |-- [ Zabbix 10.20.20.20 ]
+                      |-- [ Wazuh 10.20.20.30 ]
+                      |-- [ GLPI  10.20.20.40 ]
+                      |-- [ WinSrv 10.20.20.50 ]
+                      |-- [ Vault  10.30.30.20 ]
+DNS: AD -> Sentinel -> upstream (DoH/DoT).  NTP: pfSense -> AD.
+Logs: pfSense/syslog -> Wazuh. Agents: all -> Zabbix/Wazuh.
+```
 
 ---
 
-## 🛠️ Configuration des services
+### 4) Roles, Placement & Sizing 🧱
 
-**GLPI** — `https://glpi.sentryx.lab`
-
-* Liaison LDAP vers 10.10.10.10, synchro utilisateurs/groupes.
-* Agent GLPI pour inventaire matériel/logiciel.
-
-**Zabbix** — `https://zabbix.sentryx.lab`
-
-* Agents Windows/Debian/FreeBSD.
-* Templates : OS, systèmes de fichiers, interfaces réseau, CPU/RAM.
-* Déclencheurs : CPU élevé, disque bas, agent injoignable.
-
-**Wazuh** — `https://wazuh.sentryx.lab`
-
-* Agents sur toutes les VMs ; suivi : Event Logs Windows, auth, sudo, SSH.
-* Règles : échecs d’authentification, élévation de privilèges, processus suspects.
+| Component               | Platform                 | Placement | Minimum           | Notes                                                                |
+| ----------------------- | ------------------------ | --------- | ----------------- | -------------------------------------------------------------------- |
+| pfSense                 | VM                       | CoreNet   | 1 vCPU / 1–2 GB   | VLAN GW/DHCP; advertises routes to **W-Link**.                       |
+| Samba AD/DNS            | VM                       | CoreNet   | 1 vCPU / 1–1.5 GB | Domain `orcaz.lab`; authoritative DNS; forwards to Sentinel.         |
+| Zabbix                  | VM                       | OpsNet    | 1 vCPU / 1.5–2 GB | Agents everywhere; alerting.                                         |
+| Wazuh (single node)     | VM                       | OpsNet    | 2 vCPU / 3–4 GB   | Keep indices small for lab.                                          |
+| GLPI                    | VM                       | OpsNet    | 1 vCPU / 1–1.5 GB | ITSM; LDAP/Kerberos to AD.                                           |
+| **Windows Server 2025** | VM                       | OpsNet    | 2 vCPU / 4–8 GB   | Exam tasks; domain member or lab AD tests; **mgmt only via W-Link**. |
+| **Vault**               | **Bare-metal Linux**     | ClientNet | 8 GB RAM          | **OpenZFS + Samba/NFS**; set `zfs_arc_max≈2 GB`.                     |
+| **Sentinel**            | **Bare-metal Linux/SBC** | Control   | —                 | **Headscale** (overlay) + **Pi-hole** (DNS filter).                  |
 
 ---
 
-## 🔍 Supervision & SIEM — Flux
+### 5) Zero‑Trust Rules 🛡️
 
-* **Windows Server →** agent Zabbix + agent Wazuh (Event Logs).
-* **Serveurs Debian →** agent Zabbix + agent Wazuh (syslog/auth).
-* **pfSense →** Zabbix (SNMP/agent) + syslog vers Wazuh.
-* **TrueNAS →** Zabbix (agent/SNMP) + syslog vers Wazuh.
-
----
-
-## 🧪 Scénario d’incident (exemple)
-
-Multiples échecs de connexion sur un poste Windows (VLAN 30) suivis d’une réussite depuis une source inhabituelle.
-**Résultat attendu :** alerte Wazuh, pic d’événements Zabbix, vérification de l’IP source, verrouillage du compte ou réinitialisation du mot de passe via l’AD.
+* **Default inter‑VLAN:** deny all; allow only explicit flows.
+* **W-Link overlay:** only authenticated admin reaches management (pfSense, AD, Zabbix, Wazuh, GLPI, WinSrv, Vault).
+* **OpsNet → CoreNet:** allow DNS 53, LDAP/LDAPS 389/636, Kerberos 88/464, WinRM 5985/5986 (if used).
+* **ClientNet → Vault:** allow SMB 445 (encryption required); allow AD join; block the rest.
+* **Perimeter → Lab:** no routes.
+* **DNS egress:** servers must use Sentinel; drop raw 53/853 to Internet.
+* **Host firewalls:** local default‑deny; allow only from **W-Link** and designated VLANs.
 
 ---
 
-## 🔧 Cartographie pfSense & libvirt
+### 6) Hardening 🔒
 
-* **Interfaces pfSense :** `WAN` (pont vers l’uplink), `LAN-TRUNK` (virtio sur pont Linux, VLANs 10/20/30 taggés)
-* **VLAN pfSense :** VLAN10 = 10.10.10.1/24 · VLAN20 = 10.20.20.1/24 · VLAN30 = 10.30.30.1/24
-* **NIC des VMs :** reliées au VLAN correspondant (tag ou pont dédié)
-
----
-
-## 📊 Correspondance REAC (AIS)
-
-| REAC (AT/CP)       | Mise en œuvre SentryX                                                                          |
-| ------------------ | ---------------------------------------------------------------------------------------------- |
-| **AT1 (CP1–CP4)**  | VLANs & firewall pfSense, mises à jour, durcissement, agents Wazuh, ACLs ZFS                   |
-| **AT2 (CP5–CP7)**  | Déploiement AD/DNS, GLPI (auth AD), Zabbix ; design VLAN ; sauvegardes TrueNAS                 |
-| **AT3 (CP8–CP10)** | Supervision centralisée (Zabbix), SIEM (Wazuh), analyse & réponse aux incidents, documentation |
+Minimal OS; timely patches; SSH keys only (`PermitRootLogin no`), MFA where supported.
+pfSense: HTTPS admin; strong creds; config backups; pfBlockerNG optional.
+AD/DNS: secure dynamic updates; password/lockout policy; time sync; delegated groups.
+Vault: ZFS snapshots; **SMB encryption required**; least‑privilege shares; audit logs → Wazuh.
+Sentinel: overlay bound to internal; Pi-hole DoH/DoT upstream; rotate pre‑auth keys.
+All hosts: Zabbix + Wazuh agents; local firewall default‑deny; central logging.
 
 ---
 
-## 🔗 Points d’accès
+### 7) Backups & Recovery 💾
 
-* pfSense : `https://10.10.10.1`
-* Contrôleur de domaine (AD/DNS) : `dc1.sentryx.lab`
-* GLPI : `https://glpi.sentryx.lab`
-* Zabbix : `https://zabbix.sentryx.lab`
-* Wazuh : `https://wazuh.sentryx.lab`
-* TrueNAS : `https://truenas.sentryx.lab`
+* **3‑2‑1** rule (3 copies, 2 media, 1 offsite).
+* **Configs:** pfSense XML, Samba AD state, GLPI/Zabbix/Wazuh DB dumps.
+* **Data:** ZFS snapshots (hourly/daily/weekly) replicated off‑box.
+* **Drills:** quarterly restore test (one VM + one dataset).
 
 ---
 
-## 📄 Licence (MIT)
+### 8) Build Steps 🧰
 
-Copyright © 2025 **ZTr1∂n R.J.**
-Ce projet est sous licence **MIT**. Voir le fichier [Licence.md](https://github.com/0x1void/SentryX/blob/main/Licence.md) pour les détails.
+1. **Sentinel** (no GUI): Debian/Arch → **Headscale** (users, keys, ACL) + **Pi‑hole** (DoH/DoT).
+2. **Vault**: Debian → **OpenZFS** (`tank`, `tank/shares`, `tank/backups`); **SMB 3.1.1 encryption**; optional NFS; set `zfs_arc_max≈2 GB`.
+3. **Hypervisor**: **Arch Linux** + **KVM/QEMU/libvirt**; one bridge per VLAN; cloud‑init images.
+4. **pfSense**: VLAN 10/20/30; gateways `10.10.10.1 / 10.20.20.1 / 10.30.30.1`; DHCP; **W‑Link** client; advertise routes.
+5. **Samba AD/DC**: domain `orcaz.lab` at `10.10.10.10`; DNS authoritative; forward to Sentinel.
+6. **Ops VMs**: **Zabbix**, **Wazuh**, **GLPI**, **WinSrv** on VLAN20; auth to AD/DNS.
+7. **Firewall rules**: apply the Zero‑Trust matrix.
+8. **Validation**: run the checklist.
+
+---
+
+### 9) Validation Checklist ✅
+
+* [ ] **Overlay reachability** — From **W‑Link**, open each admin UI:
+  `https://10.10.10.1` (pfSense), `https://10.20.20.20` (Zabbix),
+  `https://10.20.20.30` (Wazuh), `https://10.20.20.40` (GLPI),
+  `https://10.20.20.50` (Windows), `smb://10.30.30.20` (Vault).
+* [ ] **DNS authority** — `dig @10.10.10.10 glpi.orcaz.lab +short` → **10.20.20.40** ;
+  `dig @10.10.10.10 zabbix.orcaz.lab +short` → **10.20.20.20** ;
+  `dig @10.10.10.10 winsrv.orcaz.lab +short` → **10.20.20.50**.
+* [ ] **Time sync** — domain members: `timedatectl` shows NTP **synchronized** (AD/pfSense source).
+* [ ] **SMB encryption** — `smbclient -L //10.30.30.20 -m SMB3 -e` reports **encryption = required**.
+* [ ] **Inter‑VLAN isolation** — from VLAN30 host: `nmap -Pn 10.20.20.0/24 -p 22,80,443,445,3389` → only expected ports; others **closed/filtered**.
+* [ ] **Monitoring/logging** — Zabbix **Latest data** populated; Wazuh **agents online**; pfSense syslog arrives; Windows logs via Wazuh.
+* [ ] **Backups** — `zfs list -t snapshot` shows today’s snapshot; last replication job **OK**.
 
 ---
 
-## 🤝 Contribution
+### 10) AIS REAC — 3 AT → 10 CP 🎓
 
-Les contributions sont les bienvenues. Voir le fichier [CONTRIBUTING.md](https://github.com/0x1void/SentryX/blob/main/CONTRIBUTING.md) file for details.
-
-* **Issues :** décrire clairement le besoin ou le problème.
-* **Fork & Branche :** nommage `feat/…` ou `fix/…`.
-* **Commits :** messages courts et explicites.
-* **PR :** un sujet par PR, avec un résumé et des notes de test.
-  Toute contribution est publiée sous la **licence MIT** du projet.
+**AT1 – Administer & Secure (CP1–CP4)** — VLANs/DHCP/DNS on pfSense; Debian/Arch hardening & patching; KVM+ZFS basics; backup/export runbooks.
+**AT2 – Design & Implement (CP5–CP7)** — VLAN/IP plan, Zero‑Trust flows, deploying pfSense/AD/GLPI/Zabbix/Wazuh/Vault/Sentinel/WinSrv, integration tests.
+**AT3 – Cyberdefense (CP8–CP10)** — host firewalls & SMB encryption, DNS filtering, SIEM/monitoring with Wazuh/Zabbix, incident response & restore drills.
 
 ---
+
+## 🇫🇷 ⚡🐋
+
+### 1) Vue d’ensemble 🚀
+
+**OrcaZ** est un lab « entreprise » compact : **VLANs**, **identité d’abord**, **observabilité**. Pour alléger l’hyperviseur, deux rôles tournent sur **Linux physique** (noms masqués) :
+
+* **Vault** — stockage : **OpenZFS + Samba/NFS** (fichiers, sauvegardes, snapshots).
+* **Sentinel** — contrôle : **Headscale** (overlay d’identité) + **Pi‑hole** (filtre DNS).
+* **Virtualisés** — **pfSense**, **Samba AD/DNS**, **Zabbix**, **Wazuh**, **GLPI**, **Windows Server 2025** (exigence d’examen).
+
+> L’administration distante est référencée uniquement par le label codé **W‑Link**.
+
+**Docs officielles**
+Arch Linux — [https://wiki.archlinux.org/](https://wiki.archlinux.org/)
+KVM/QEMU — [https://www.qemu.org/](https://www.qemu.org/) · libvirt — [https://libvirt.org/](https://libvirt.org/)
+Debian — [https://www.debian.org/releases/](https://www.debian.org/releases/)
+OpenZFS — [https://openzfs.github.io/openzfs-docs/](https://openzfs.github.io/openzfs-docs/)
+Samba AD/DC — [https://wiki.samba.org/index.php/Setting\_up\_Samba\_as\_an\_Active\_Directory\_Domain\_Controller](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+Zabbix — [https://www.zabbix.com/documentation/current/fr/manual/installation](https://www.zabbix.com/documentation/current/fr/manual/installation)
+Wazuh — [https://documentation.wazuh.com/current/](https://documentation.wazuh.com/current/)
+GLPI — [https://glpi-project.org/](https://glpi-project.org/)
+Pi-hole — [https://docs.pi-hole.net/](https://docs.pi-hole.net/)
+Headscale — [https://headscale.net/](https://headscale.net/)
+WireGuard — [https://www.wireguard.com/](https://www.wireguard.com/)
+pfSense — [https://docs.netgate.com/pfsense/en/latest/](https://docs.netgate.com/pfsense/en/latest/)
+Windows Server 2025 — [https://learn.microsoft.com/windows-server/](https://learn.microsoft.com/windows-server/)
+Alternative (Vault) : TrueNAS CORE — [https://www.truenas.com/docs/core/](https://www.truenas.com/docs/core/)
+
+---
+
+### 2) Réseau & adressage 🌐
+
+Exemples en **10.x.x.x/24** (un /24 par VLAN). Tu peux aussi choisir **172.16.0.0/12** ou **192.168.0.0/16** et adapter le CIDR (/27, /23, /22…).
+
+| VLAN | Nom       | Sous‑réseau   | Passerelle | Pool DHCP                 | Hôtes statiques clés                                                                           |
+| :--: | --------- | ------------- | ---------- | ------------------------- | ---------------------------------------------------------------------------------------------- |
+|  10  | CoreNet   | 10.10.10.0/24 | 10.10.10.1 | 10.10.10.100–10.10.10.199 | **pfSense** 10.10.10.1 • **AD/DNS** 10.10.10.10 • **Sentinel** 10.10.10.2                      |
+|  20  | OpsNet    | 10.20.20.0/24 | 10.20.20.1 | 10.20.20.100–10.20.20.199 | **Zabbix** 10.20.20.20 • **Wazuh** 10.20.20.30 • **GLPI** 10.20.20.40 • **WinSrv** 10.20.20.50 |
+|  30  | ClientNet | 10.30.30.0/24 | 10.30.30.1 | 10.30.30.100–10.30.30.199 | **Vault** 10.30.30.20                                                                          |
+
+**Domaine/DNS :** `orcaz.lab` (AD/DNS 10.10.10.10).
+**Chaînage DNS :** AD/DNS → Sentinel (filtre) → résolveurs DoH/DoT.
+**NTP :** pfSense ↔ pool.ntp.org ; membres via AD.
+
+---
+
+### 3) Schéma 🧭 — Mermaid détaillé
+
+```mermaid
+flowchart TB
+  subgraph V10["VLAN10 • CoreNet (10.10.10.0/24)"]
+    PF["pfSense
+10.10.10.1"]
+    DC["Samba AD/DNS
+10.10.10.10"]
+    SEN["Sentinel
+(overlay + filtre DNS)
+10.10.10.2"]
+  end
+  subgraph V20["VLAN20 • OpsNet (10.20.20.0/24)"]
+    ZB["Zabbix
+10.20.20.20"]
+    WZ["Wazuh
+10.20.20.30"]
+    GP["GLPI
+10.20.20.40"]
+    WS["Windows Server 2025
+10.20.20.50"]
+  end
+  subgraph V30["VLAN30 • ClientNet (10.30.30.0/24)"]
+    VA["Vault (OpenZFS + SMB/NFS)
+10.30.30.20"]
+  end
+  subgraph WLFR["W‑Link • overlay d’identité (gestion)"]
+    ADMF["Poste admin"]
+  end
+
+  PF --- DC
+  PF --- ZB
+  PF --- WZ
+  PF --- GP
+  PF --- WS
+  PF --- VA
+  DC --- VA
+  DC --- WS
+
+  ZB -- "DNS 53" --> DC
+  WZ -- "DNS 53" --> DC
+  GP -- "LDAP/LDAPS 389/636, Kerberos 88/464, DNS 53" --> DC
+  WS -- "LDAP/LDAPS 389/636, Kerberos 88/464, DNS 53" --> DC
+  VA <-- "SMB 445 (chiffré) / NFS (opt)" --> PF
+  DC -- "Transfert DNS" --> SEN
+  SEN -- "Amont DoH/DoT" --> PF
+  PF -- "NTP 123" --> DC
+  DC -- "Agent Zabbix → 10051/10050" --> ZB
+  PF -- "Syslog 514/UDP" --> WZ
+  DC -- "Winlogbeat/OSSEC → Wazuh" --> WZ
+  GP -- "Télémétrie" --> ZB
+  VA -- "Agents Zabbix/Wazuh" --> ZB
+  WS -- "Agents Zabbix/Wazuh" --> ZB
+
+  ADMF -. "gestion HTTPS/SSH/RDP/SMB via W‑Link" .-> PF
+  ADMF -. "gestion" .-> DC
+  ADMF -. "gestion" .-> ZB
+  ADMF -. "gestion" .-> WZ
+  ADMF -. "gestion" .-> GP
+  ADMF -. "gestion" .-> WS
+  ADMF -. "gestion" .-> VA
+```
+
+**ASCII de secours**
+
+```text
+W‑Link (Admin) --> [ pfSense 10.10.10.1 ]
+                      |-- [ AD/DNS 10.10.10.10 ]
+                      |-- [ Zabbix 10.20.20.20 ]
+                      |-- [ Wazuh 10.20.20.30 ]
+                      |-- [ GLPI  10.20.20.40 ]
+                      |-- [ WinSrv 10.20.20.50 ]
+                      |-- [ Vault  10.30.30.20 ]
+DNS : AD -> Sentinel -> amont (DoH/DoT).  NTP : pfSense -> AD.
+Logs : pfSense/syslog -> Wazuh. Agents : tous -> Zabbix/Wazuh.
+```
+
+---
+
+### 4) Rôles, placement & tailles 🧱
+
+| Composant               | Plateforme             | Emplacement | Mini              | Notes                                                                     |
+| ----------------------- | ---------------------- | ----------- | ----------------- | ------------------------------------------------------------------------- |
+| pfSense                 | VM                     | CoreNet     | 1 vCPU / 1–2 Go   | GW/DHCP ; routes annoncées à **W‑Link**.                                  |
+| Samba AD/DNS            | VM                     | CoreNet     | 1 vCPU / 1–1,5 Go | Domaine `orcaz.lab` ; DNS autoritaire ; forward vers Sentinel.            |
+| Zabbix                  | VM                     | OpsNet      | 1 vCPU / 1,5–2 Go | Supervision + alertes.                                                    |
+| Wazuh (nœud unique)     | VM                     | OpsNet      | 2 vCPU / 3–4 Go   | Indices limités pour labo.                                                |
+| GLPI                    | VM                     | OpsNet      | 1 vCPU / 1–1,5 Go | ITSM ; LDAP/Kerberos via AD.                                              |
+| **Windows Server 2025** | VM                     | OpsNet      | 2 vCPU / 4–8 Go   | Tâches d’examen ; membre du domaine ou tests AD ; **gestion via W‑Link**. |
+| **Vault**               | **Physique Linux**     | ClientNet   | 8 Go RAM          | **OpenZFS + Samba/NFS** ; `zfs_arc_max≈2 Go`.                             |
+| **Sentinel**            | **Physique Linux/SBC** | Contrôle    | —                 | **Headscale** (overlay) + **Pi‑hole** (filtre DNS).                       |
+
+---
+
+### 5) Politique Zero‑Trust 🛡️
+
+Inter‑VLAN = refus par défaut ; autoriser seulement les flux nécessaires.
+Overlay **W‑Link** = seul l’admin authentifié atteint la gestion (pfSense, AD, Zabbix, Wazuh, GLPI, WinSrv, Vault).
+OpsNet → CoreNet : DNS 53, LDAP/LDAPS 389/636, Kerberos 88/464, WinRM 5985/5986 (si utilisé).
+ClientNet → Vault : SMB 445 (chiffrement requis) ; jonction AD ; reste bloqué.
+Périmètre → Lab : aucune route.
+DNS sortant : serveurs → Sentinel ; bloquer 53/853 Internet.
+Pare‑feu hôtes : défaut‑refus ; n’autoriser que **W‑Link** et les VLANs autorisés.
+
+---
+
+### 6) Durcissement 🔒
+
+OS minimal ; mises à jour ; SSH par clés (`PermitRootLogin no`), MFA si dispo.
+pfSense : admin HTTPS ; mots de passe forts ; sauvegardes ; pfBlockerNG optionnel.
+AD/DNS : mises à jour DNS sécurisées ; stratégie mots de passe/verrouillage ; synchro temps ; délégations.
+Vault : snapshots ZFS ; **SMB chiffré obligatoire** ; partages à privilèges minimaux ; audit vers Wazuh.
+Sentinel : overlay lié à l’interne ; Pi‑hole DoH/DoT ; rotation des clés d’enrôlement.
+Tous : agents Zabbix + Wazuh ; pare‑feu local défaut‑refus ; logs centralisés.
+
+---
+
+### 7) Sauvegardes & PRA 💾
+
+Règle **3‑2‑1** ; exports de config (pfSense, AD, GLPI/Zabbix/Wazuh) ; snapshots ZFS (H/J/S) répliqués ; test de restauration trimestriel.
+
+---
+
+### 8) Déploiement 🧰
+
+1. **Sentinel** (sans GUI) : Debian/Arch → **Headscale** (utilisateurs/ACL) + **Pi‑hole** (DoH/DoT).
+2. **Vault** : Debian → **OpenZFS** (`tank`, `tank/shares`, `tank/backups`) ; **SMB 3.1.1** ; NFS optionnel ; `zfs_arc_max≈2 Go`.
+3. **Hyperviseur** : **Arch Linux** + **KVM/QEMU/libvirt** ; un pont par VLAN ; cloud‑init.
+4. **pfSense** : VLAN 10/20/30 ; passerelles `10.10.10.1 / 10.20.20.1 / 10.30.30.1` ; DHCP ; client **W‑Link** ; routes.
+5. **Samba AD/DC** : domaine `orcaz.lab` à `10.10.10.10` ; DNS autoritaire ; forward vers Sentinel.
+6. **VMs Ops** : **Zabbix**, **Wazuh**, **GLPI**, **WinSrv** sur VLAN20 ; auth via AD/DNS.
+7. **Pare‑feu** : appliquer la matrice Zero‑Trust.
+8. **Validation** : exécuter la checklist.
+
+---
+
+### 9) Checklist de validation ✅
+
+* [ ] **Accès overlay** — Depuis **W‑Link**, ouvrir chaque UI :
+  `https://10.10.10.1` (pfSense), `https://10.20.20.20` (Zabbix),
+  `https://10.20.20.30` (Wazuh), `https://10.20.20.40` (GLPI),
+  `https://10.20.20.50` (Windows), `smb://10.30.30.20` (Vault).
+* [ ] **Autorité DNS** — `dig @10.10.10.10 glpi.orcaz.lab +short` → **10.20.20.40** ;
+  `dig @10.10.10.10 zabbix.orcaz.lab +short` → **10.20.20.20** ;
+  `dig @10.10.10.10 winsrv.orcaz.lab +short` → **10.20.20.50**.
+* [ ] **Synchronisation temps** — `timedatectl` indique **synchronized** (source AD/pfSense).
+* [ ] **Chiffrement SMB** — `smbclient -L //10.30.30.20 -m SMB3 -e` renvoie **encryption = required**.
+* [ ] **Isolement inter‑VLAN** — depuis VLAN30 : `nmap -Pn 10.20.20.0/24 -p 22,80,443,445,3389` → ports attendus ; autres **fermés/filtrés**.
+* [ ] **Supervision & logs** — Zabbix **Données récentes** non vides ; Wazuh **agents en ligne** ; syslog pfSense reçu ; logs Windows visibles.
+* [ ] **Sauvegardes** — `zfs list -t snapshot` montre le snapshot du jour ; dernière réplication **OK**.
+
+---
+
+### Licence 📜
+
+MIT — contributions bienvenues.
+
 
 ✍️ *Développé par ZTr1∂n R.J. – 2025*
