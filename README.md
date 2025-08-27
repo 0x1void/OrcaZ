@@ -51,7 +51,7 @@ Examples use **10.x.x.x/24** per VLAN for clarity. You can also use **172.16.0.0
 
 ---
 
-### 3) Blueprint 🧭 — detailed Mermaid (GitHub‑safe)
+### 3) Blueprint 🧭
 
 ```mermaid
 flowchart TB
@@ -266,7 +266,7 @@ Exemples en **10.x.x.x/24** (un /24 par VLAN). Tu peux aussi choisir **172.16.0.
 
 ---
 
-### 3) Schéma 🧭 — Mermaid détaillé
+### 3) Schéma 🧭
 
 ```mermaid
 flowchart TB
