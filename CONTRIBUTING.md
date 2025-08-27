@@ -1,8 +1,8 @@
 # Contributing 🤝 — EN 🇺🇸 / FR 🇫🇷
 
-## 🇺🇸 English
+## 🇺🇸
 
-Thanks for taking the time to help improve SentryX. This lab is meant to be practical, reproducible, and easy to study. Small, focused contributions are welcome.
+Thanks for taking the time to help improve **OrcaZ**. This lab is meant to be practical, reproducible, and easy to study. Small, focused contributions are welcome.
 
 ### How to contribute
 - Open an issue 📝 for:
@@ -28,23 +28,23 @@ Thanks for taking the time to help improve SentryX. This lab is meant to be prac
    - Any testing steps
 
 ### Pull Request checklist
-- Runs on Debian 13 Trixie (host) with KVM/libvirt.
+- Runs on **Arch Linux** (host) with **KVM/libvirt** (Debian 13 acceptable alternative).
 - No secrets, tokens, or private data included.
 - Documentation updated when behavior or steps change.
-- Tables and examples are clear and consistent with the rest of the README.
-- License notice: by contributing, you agree your code/docs are released under MIT.
+- Tables and examples are clear and consistent with the README + Mermaid flows.
+- License notice: by contributing, you agree your code/docs are released under **MIT**.
 
 ### Style for docs
-- US English in the English section; French in the French section.
+- US English in the 🇺🇸 section; French in the 🇫🇷 section.
 - Keep the tone simple and direct; prefer concrete steps over generic advice.
-- Use markdown tables where they add clarity.
+- Use Markdown tables where they add clarity.
 - Keep emojis helpful and minimal.
 
 ---   ZTr1∂n
 
-## 🇫🇷 Français
+## 🇫🇷
 
-Merci pour votre aide pour améliorer SentryX. Ce lab se veut pratique, reproductible et clair à étudier. Les contributions petites et ciblées sont les bienvenues.
+Merci pour votre aide pour améliorer **OrcaZ**. Ce lab se veut pratique, reproductible et clair à étudier. Les contributions petites et ciblées sont les bienvenues.
 
 ### Comment contribuer
 - Ouvrir une issue 📝 pour :
@@ -70,14 +70,14 @@ Merci pour votre aide pour améliorer SentryX. Ce lab se veut pratique, reproduc
    - Comment tester
 
 ### Liste de contrôle pour la PR
-- Fonctionne sur Debian 13 Trixie (hôte) avec KVM/libvirt.
+- Fonctionne sur **Arch Linux** (hôte) avec **KVM/libvirt** (Debian 13 en alternative).
 - Aucun secret, jeton ou donnée privée inclus.
 - Documentation mise à jour si le comportement ou les étapes changent.
-- Tables et exemples cohérents avec le reste du README.
-- Licence : en contribuant, vous acceptez que votre code/docs soient publiés sous licence MIT.
+- Tables/exemples cohérents avec le README et les flux Mermaid.
+- Licence : en contribuant, vous acceptez que votre code/docs soient publiés sous licence **MIT**.
 
 ### Style pour la documentation
-- Anglais US dans la section English ; français dans la section Française.
+- Anglais US dans la section 🇺🇸 ; français dans la section 🇫🇷.
 - Ton simple et direct ; privilégier les étapes concrètes aux conseils généraux.
 - Utiliser des tableaux Markdown quand cela clarifie.
 - Émojis utiles et discrets.
