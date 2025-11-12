@@ -1,6 +1,7 @@
 # ⚡🐋 OrcaZ — Zero-Trust Lab Infrastructure
 
-![Arch Linux](https://img.shields.io/badge/Arch%20Linux-rolling-blue?logo=archlinux) ![KVM/QEMU](https://img.shields.io/badge/KVM%2FQEMU-virtualization-333?logo=qemu) ![libvirt](https://img.shields.io/badge/libvirt-enabled-4c9) ![pfSense](https://img.shields.io/badge/pfSense-firewall-1f4a7f?logo=pfsense) ![Windows Server 2025](https://img.shields.io/badge/Windows%20Server-2025-0078d6?logo=windows)
+![Fedora](https://img.shields.io/badge/Fedora-43-blue?logo=fedora)!
+[KVM/QEMU](https://img.shields.io/badge/KVM%2FQEMU-virtualization-333?logo=qemu) ![libvirt](https://img.shields.io/badge/libvirt-enabled-4c9) ![pfSense](https://img.shields.io/badge/pfSense-firewall-1f4a7f?logo=pfsense) ![Windows Server 2025](https://img.shields.io/badge/Windows%20Server-2025-0078d6?logo=windows)
 ![Debian](https://img.shields.io/badge/Debian-GLPI%2FZabbix%2FWazuh-a80030?logo=debian) ![TrueNAS](https://img.shields.io/badge/TrueNAS-CORE-0b6aa2?logo=truenas) ![Pi-hole](https://img.shields.io/badge/Pi--hole-DNS%20filtering-a41f1f?logo=pi-hole) ![Headscale](https://img.shields.io/badge/Headscale-identity%20overlay-444) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 **Quick links / Liens rapides:** [🤝 Contributing](https://github.com/0x1void/OrcaZ/blob/main/Contributing.md) • [📜 Licence (MIT)](https://github.com/0x1void/OrcaZ/blob/main/Licence.md)
