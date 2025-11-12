@@ -1,7 +1,16 @@
 # ⚡🐋 OrcaZ — Zero-Trust Lab Infrastructure
 
-![Fedora](https://img.shields.io/badge/Fedora-43-blue?logo=fedora)![openSUSE Tumbleweed Research VM](https://img.shields.io/badge/openSUSE_Tumbleweed-Research%20VM-%2364B345?logo=opensuse)![KVM/QEMU](https://img.shields.io/badge/KVM%2FQEMU-virtualization-333?logo=qemu) ![libvirt](https://img.shields.io/badge/libvirt-enabled-4c9) ![pfSense](https://img.shields.io/badge/pfSense-firewall-1f4a7f?logo=pfsense) ![Windows Server 2025](https://img.shields.io/badge/Windows%20Server-2025-0078d6?logo=windows)
-![Debian](https://img.shields.io/badge/Debian-GLPI%2FZabbix%2FWazuh-a80030?logo=debian) ![TrueNAS](https://img.shields.io/badge/TrueNAS-CORE-0b6aa2?logo=truenas) ![Pi-hole](https://img.shields.io/badge/Pi--hole-DNS%20filtering-a41f1f?logo=pi-hole) ![Headscale](https://img.shields.io/badge/Headscale-identity%20overlay-444) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Fedora 43](https://img.shields.io/badge/Fedora-43-294172?logo=fedora&logoColor=white)
+![openSUSE Tumbleweed (Research VM)](https://img.shields.io/badge/openSUSE_Tumbleweed-Research%20VM-73ba25?logo=opensuse&logoColor=white)
+![KVM / QEMU](https://img.shields.io/badge/KVM%20%2F%20QEMU-Virtualization-333333?logo=qemu&logoColor=white)
+![libvirt](https://img.shields.io/badge/libvirt-Enabled-4C9A2A?logo=libvirt&logoColor=white)
+![pfSense](https://img.shields.io/badge/pfSense-Firewall-1F4A7F?logo=pfsense&logoColor=white)
+![Windows Server 2025](https://img.shields.io/badge/Windows_Server-2025-0078D6?logo=windows&logoColor=white)
+![Debian (GLPI / Zabbix / Wazuh)](https://img.shields.io/badge/Debian-GLPI%20%2F%20Zabbix%20%2F%20Wazuh-A80030?logo=debian&logoColor=white)
+![TrueNAS CORE](https://img.shields.io/badge/TrueNAS-CORE-0B6AA2?logo=truenas&logoColor=white)
+![Pi-hole](https://img.shields.io/badge/Pi--hole-DNS%20Filtering-A41F1F?logo=pi-hole&logoColor=white)
+![Headscale](https://img.shields.io/badge/Headscale-Identity%20Overlay-444444?logo=tailscale&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-FFC107?logo=open-source-initiative&logoColor=black)
 
 **Quick links / Liens rapides:** [🤝 Contributing](https://github.com/0x1void/OrcaZ/blob/main/Contributing.md) • [📜 Licence (MIT)](https://github.com/0x1void/OrcaZ/blob/main/Licence.md)
 
